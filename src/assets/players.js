@@ -1,262 +1,340 @@
 export const players = [
   {
     id: 1,
+    number: 3,
     name: 'Thiago Silva',
     position: 'CB',
     overall: 86,
     league: 'Premier League',
     team: 'Chelsea',
     finishing: 78,
-    passing: 84
+    value: 88,
+    passing: 84,
+    face_url: 'https://cdn.sofifa.net/players/164/240/23_60.png'
   },
   {
     id: 2,
+    number: 10,
     name: 'Neymar',
-    position: 'LW',
+    position: 'CAM',
     overall: 91,
     league: 'Ligue 1',
     team: 'Paris Saint-Germain',
     finishing: 89,
-    passing: 87
+    value: 81,
+    passing: 87,
+    face_url: 'https://cdn.sofifa.net/players/190/871/23_60.png'
   },
   {
     id: 3,
+    number: 2,
     name: 'Danilo',
     position: 'RB',
     overall: 82,
     league: 'Serie A',
     team: 'Juventus',
+    value: 71,
     finishing: 75,
-    passing: 80
+    passing: 80,
+    face_url: 'https://cdn.sofifa.net/players/199/304/23_60.png'
   },
   {
     id: 4,
+    number: 4,
     name: 'Marquinhos',
-    position: 'CM',
+    position: 'CB',
     overall: 88,
     league: 'Ligue 1',
+    value: 80,
     team: 'Paris Saint-Germain',
     finishing: 82,
-    passing: 85
+    passing: 85,
+    face_url: 'https://cdn.sofifa.net/players/207/865/23_60.png'
   },
   {
     id: 5,
+    number: 1,
     name: 'Alisson',
     position: 'GK',
     overall: 89,
+    value: 80,
     league: 'Premier League',
     team: 'Liverpool',
     finishing: 45,
-    passing: 79
+    passing: 79,
+    face_url: 'https://cdn.sofifa.net/players/212/831/23_60.png'
   },
   {
     id: 6,
+    number: 6,
     name: 'Alex Sandro',
     position: 'LB',
     overall: 80,
+    value: 76,
     league: 'Serie A',
     team: 'Juventus',
     finishing: 68,
-    passing: 74
+    passing: 74,
+    face_url: 'https://cdn.sofifa.net/players/191/043/23_60.png'
   },
   {
     id: 7,
+    number: 5,
     name: 'Casemiro',
-    position: 'CDM',
+    position: 'CM',
     overall: 90,
+    value: 88,
     league: 'Premier League',
     team: 'Manchester United',
     finishing: 78,
-    passing: 83
+    passing: 83,
+    face_url: 'https://cdn.sofifa.net/players/200/145/23_60.png'
   },
   {
     id: 8,
+    number: 8,
     name: 'Fred',
-    position: 'CDM',
+    position: 'CM',
     overall: 82,
+    value: 73,
     league: 'Premier League',
     team: 'Manchester United',
     finishing: 70,
-    passing: 77
+    passing: 77,
+    face_url: 'https://cdn.sofifa.net/players/209/297/23_60.png'
   },
   {
     id: 9,
+    number: 7,
     name: 'Lucas Paquetá',
     position: 'CAM',
     overall: 85,
+    value: 82,
     league: 'Premier League',
     team: 'West Ham',
     finishing: 82,
-    passing: 84
+    passing: 84,
+    face_url: 'https://cdn.sofifa.net/players/233/927/23_60.png'
   },
   {
     id: 10,
     name: 'Raphinha',
+    number: 11,
     position: 'RW',
     overall: 83,
+    value: 80,
     league: 'La Liga',
     team: 'Barcelona',
     finishing: 84,
-    passing: 80
+    passing: 80,
+    face_url: 'https://cdn.sofifa.net/players/233/419/23_60.png'
   },
   {
     id: 11,
     name: 'Vinicius Jr.',
+    number: 20,
     position: 'LW',
     overall: 84,
+    value: 80,
     league: 'La Liga',
     team: 'Real Madrid',
     finishing: 86,
-    passing: 82
+    passing: 82,
+    face_url: 'https://cdn.sofifa.net/players/238/794/23_60.png'
   },
   {
     id: 12,
     name: 'Richarlison',
+    number: 9,
     position: 'CF',
     overall: 86,
+    value: 79,
     league: 'Premier League',
     team: 'Tottenham',
     finishing: 84,
-    passing: 78
+    passing: 78,
+    face_url: 'https://cdn.sofifa.net/players/231/943/23_60.png'
   },
   {
     id: 13,
     name: 'Gabriel Jesus',
+    number: 18,
     position: 'CF',
     overall: 87,
+    value: 79,
     league: 'Premier League',
     team: 'Arsenal',
     finishing: 85,
-    passing: 80
+    passing: 80,
+    face_url: 'https://cdn.sofifa.net/players/230/666/23_60.png'
   },
   {
     id: 14,
     name: 'Fabinho',
-    position: 'CDM',
+    number: 15,
+    position: 'CM',
     overall: 87,
+    value: 81,
     league: 'Premier League',
     team: 'Liverpool',
     finishing: 75,
-    passing: 85
+    passing: 85,
+    face_url: 'https://cdn.sofifa.net/players/209/499/23_60.png'
   },
   {
     id: 15,
     name: 'Bruno Guimarães',
-    position: 'CDM',
+    number: 17,
+    position: 'CM',
     overall: 84,
+    value: 75,
     league: 'Ligue 1',
     team: 'Lyon',
     finishing: 80,
-    passing: 82
+    passing: 82,
+    face_url: 'https://cdn.sofifa.net/players/247/851/23_60.png'
   },
   {
     id: 16,
     name: 'Éder Militão',
     position: 'CB',
+    number: 14,
     overall: 84,
+    value: 78,
     league: 'La Liga',
     team: 'Real Madrid',
     finishing: 60,
-    passing: 70
+    passing: 70,
+    face_url: 'https://cdn.sofifa.net/players/240/130/23_60.png'
   },
   {
     id: 17,
     name: 'Alex Telles',
+    number: 16,
     position: 'LB',
     overall: 83,
+    value: 77,
     league: 'Premier League',
     team: 'Manchester United',
     finishing: 75,
-    passing: 80
+    passing: 80,
+    face_url: 'https://cdn.sofifa.net/players/212/462/23_60.png'
   },
   {
     id: 18,
     name: 'Ederson',
     position: 'GK',
+    number: 23,
     overall: 89,
+    value: 76,
     league: 'Premier League',
     team: 'Manchester City',
     finishing: 40,
-    passing: 90
+    passing: 90,
+    face_url: 'https://cdn.sofifa.net/players/210/257/23_60.png'
   },
   {
     id: 19,
     name: 'Antony',
     position: 'RW',
     overall: 82,
+    number: 19,
+    value: 78,
     league: 'Premier League',
     team: 'Manchester United',
     finishing: 80,
-    passing: 75
+    passing: 75,
+    face_url: 'https://cdn.sofifa.net/players/255/475/23_60.png'
   },
   {
     id: 20,
     name: 'Pedro',
-    position: 'LW',
+    number: 25,
+    position: 'CF',
     overall: 84,
+    value: 78,
     league: 'Brasileirão',
     team: 'Flamengo',
     finishing: 85,
-    passing: 80
+    passing: 80,
+    face_url: 'https://cdn.sofifa.net/players/233/605/23_60.png'
   },
   {
     id: 21,
     name: 'Everton Ribeiro',
+    number: 22,
     position: 'CAM',
     overall: 83,
+    value: 78,
     league: 'Brasileirão',
     team: 'Flamengo',
     finishing: 80,
-    passing: 85
+    passing: 85,
+    face_url: 'https://cdn.sofifa.net/players/181/019/23_60.png'
   },
   {
     id: 22,
     name: 'Rodrygo',
+    number: 21,
     position: 'RW',
     overall: 86,
+    value: 88,
     league: 'La Liga',
     team: 'Real Madrid',
     finishing: 85,
-    passing: 80
+    passing: 80,
+    face_url: 'https://cdn.sofifa.net/players/243/812/23_60.png'
   },
   {
     id: 23,
     name: 'Dani Alves',
+    number: 13,
     position: 'RB',
     overall: 86,
+    value: 77,
     league: 'Brasileirão',
     team: 'São Paulo',
     finishing: 60,
-    passing: 85
+    passing: 85,
+    face_url: 'https://cdn.sofifa.net/players/146/530/23_60.png'
   },
   {
     id: 24,
     name: 'Bremer',
+    number: 24,
     position: 'CB',
+    value: 77,
     overall: 82,
     league: 'Serie A',
     team: 'Juventus',
     finishing: 50,
-    passing: 70
+    passing: 70,
+    face_url: 'https://cdn.sofifa.net/players/239/580/23_60.png'
   },
   {
     id: 25,
     name: 'Gabriel Martinelli',
+    number: 26,
     position: 'LW',
+    value: 79,
     overall: 85,
     league: 'Premier League',
     team: 'Arsenal',
     finishing: 85,
     passing: 80,
+    face_url: 'https://cdn.sofifa.net/players/251/566/23_60.png'
   },
   {
     id: 26,
     name: 'Weverton',
+    number: 12,
     position: 'GK',
     overall: 84,
+    value: 77,
     league: 'Brasileirão',
     team: 'Palmeiras',
     finishing: 50,
     passing: 60,
+    face_url: 'https://cdn.sofifa.net/players/186/555/23_60.png'
   }
 ]
