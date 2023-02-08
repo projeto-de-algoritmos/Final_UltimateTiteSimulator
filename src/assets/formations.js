@@ -106,11 +106,10 @@ export const formationData = {
     },
     {
       id: 11,
-      position: 'CF',
+      position: 'ST',
       positionX: 315,
       positionY: 50,
-      touchOptions: [
-      ]
+      touchOptions: []
     },
   ]
 };

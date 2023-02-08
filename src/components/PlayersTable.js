@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { BsFillCaretDownFill } from "react-icons/bs";
+import { sortPlayers } from "../utils/players";
 
 const PlayersTable = (props) => {
   const { players, setPlayers } = props;
@@ -8,24 +9,17 @@ const PlayersTable = (props) => {
   const [sortOrder, setSortOrder] = useState('desc');
 
   const columns = [
+    { key: "number", label: "Número" },
     { key: "position", label: "Posição" },
     { key: "name", label: "Nome" },
     { key: "overall", label: "Geral" },
+    { key: "passing", label: "Passe" },
   ]
 
   // sorting
 
   const sortList = (column, order) => {
-    const newList = [...players];
-    selectedColumn === 'overall'
-      ? newList.sort((a, b) => a[column] - b[column])
-      : newList.sort((a, b) => {
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
-        return 0;
-      });
-    order === "desc" && newList.reverse();
-
+    const newList = sortPlayers(players, column, order);
     setPlayers(newList);
   }
 
@@ -85,9 +79,11 @@ const PlayersTable = (props) => {
           <input className="form-check-input position-static" type="checkbox" checked={player.selected} onChange={() => handlePlayerCheckbox(player.id)} />
         </div>
       </td>
-      <td className="col-3">{player.position}</td>
+      <td className="col-2">{player.number}</td>
+      <td className="col-2">{player.position}</td>
       <td className="col-6">{player.name}</td>
-      <td className="col-3">{player.overall}</td>
+      <td className="col-2">{player.overall}</td>
+      <td className="col-2">{player.passing}</td>
     </tr>
   ));
 

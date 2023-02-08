@@ -2,52 +2,50 @@ import { useState, useEffect } from 'react';
 import Field from '../components/Field';
 import PlayersTableResult from '../components/PlayersTableResult';
 import { formationData } from '../assets/formations';
-import { getTeam } from '../utils/selectTeam';
-import dijkstra, { getWeightedGraphFromData } from '../utils/dijkstra';
+import { getLineup } from '../utils/players';
+import dijkstra, { getWeightedGraph } from '../utils/dijkstra';
 
 const ResultPage = (props) => {
   const { setMode, players } = props;
   const [result, setResult] = useState(null);
-
-  const [team, setTeam] = useState([]);
+  const [lineup, setLineup] = useState(null);
 
   useEffect(() => {
-    let playersCopy = [...players];
-    playersCopy.filter(player => player.selected);
-    const newTeam = getTeam(players, formationData);
-    setTeam(newTeam);
+    let playersCopy = [...players].filter(player => player.selected);
+    const newLineup = getLineup(playersCopy, formationData);
+    setLineup(newLineup);
   }, [])
 
   useEffect(() => {
-    const graph = getWeightedGraphFromData(team);
-    const result = dijkstra(graph, formationData.firstPlayer, formationData.lastPlayer);
-    setResult(result);
-  }, [team])
+    if (!!lineup) {
+      const graph = getWeightedGraph(lineup.players);
+      const result = dijkstra(graph, lineup.firstPlayer.toString(), lineup.lastPlayer.toString());
+      setResult(result);
+    }
+  }, [lineup])
 
   const handleReturnBtn = () => setMode('initial');
 
   return (
-    <div className="main-page">
-      <section className="text-center">
-        <h1>Tite Simulator</h1>
-        <p>Depois de vergonhosamente perder a copa do mundo para a Croácia, Tite quer buscar a vingança virtual de sua derrota e precisa da sua ajuda para escalar o melhor time possível com os mesmos jogadores que convocou.</p>
-        <p>Dessa vez, ele está disposto a experimentar novas táticas e considerar o entrosamento dos jogadores.</p>
-      </section>
-      <section className='actions-section d-flex justify-content-center'>
-        <button type="button" className="btn btn-primary" onClick={handleReturnBtn}>Retornar</button>
-      </section>
-      <section className='d-flex justify-content-center text-nowrap'>
-        <PlayersTableResult players={team} />
-      </section>
-      <section className='fields-section'>
-        <div className='field-container'>
-          <Field mode={'init'} lineup={formationData} result={result} />
-        </div>
-        <div className='field-container'>
-          <Field mode={'result'} lineup={formationData} result={result} />
-        </div>
-      </section>
-    </div >
+    <div className="home">
+      <div className='container'>
+        <section className="text-center">
+          <h1>Tite Simulator</h1>
+          <p>Abaixo temos a lista de jogadores titulares baseados na melhor classificação geral e a rota onde há a média de maior precisão de passe <br />(baseado na medida de habilidade em passe de cada jogador escalado)</p>
+        </section>
+        <section className='actions-section d-flex justify-content-center align-items-center'>
+          <button type="button" className="btn btn-primary" onClick={handleReturnBtn}>Retornar</button>
+          <h5 className="ml-4 mb-1">Classificação do time: {lineup?.overall}</h5>
+          <h5 className="ml-4 mb-1">Média de precisão dos passes: {Math.round(result?.passingAvg)}</h5>
+        </section>
+        <section className='fields-section text-nowrap'>
+          <PlayersTableResult players={lineup?.players} />
+          <div className='field-container'>
+            <Field mode={'init'} lineup={lineup} result={result?.path} />
+          </div>
+        </section>
+      </div>
+    </div>
   );
 }
 

@@ -3,15 +3,15 @@ import TouchLine from './TouchLine';
 import fieldSvg from '../assets/svg/field.svg';
 
 const Field = (props) => {
-  const { mode, lineup, result } = props;
+  const { lineup, result } = props;
 
   function getPlayerByNumber(playerId) {
-    const player = lineup.formationPlayers.find(player => player.id === playerId);
+    const player = lineup?.players.find(player => player.id === Number(playerId));
     return player;
   }
 
   const renderAllPossibleTouches = () =>
-    lineup.formationPlayers.map(playerA =>
+    lineup?.players.map(playerA =>
       playerA.touchOptions.map(touchOption => {
         const playerB = getPlayerByNumber(touchOption.id);
 
@@ -26,7 +26,7 @@ const Field = (props) => {
     );
 
   const renderFinalTouches = () => {
-    if (result === null) return null;
+    if (result === null || result === undefined) return null;
 
     let touches = [];
     for (let i = 0; i < result.length - 1; i++) {
@@ -42,15 +42,16 @@ const Field = (props) => {
           key={`line${touch.playerA.id}-${touch.playerB.id}`}
           playerA={touch.playerA}
           playerB={touch.playerB}
+          mode="result"
         />
       )
     });
   }
 
-  const renderPlayers = () => lineup.formationPlayers.map(player =>
+  const renderPlayers = () => lineup?.players.map(player =>
     <Player
       key={`player${player.id}`}
-      number={player.id}
+      number={player.number}
       positionX={player.positionX}
       positionY={player.positionY}
       status='normal'
@@ -60,9 +61,10 @@ const Field = (props) => {
   return (
     <div className='field' style={{ backgroundImage: `url(${fieldSvg})` }}>
       <div className='field-touches'>
-        {mode === 'init' ? renderAllPossibleTouches() : renderFinalTouches()}
+        {renderAllPossibleTouches()}
+        {renderFinalTouches()}
       </div>
-      <div className={`field-players field${lineup}`}>
+      <div className={`field-players`}>
         {renderPlayers()}
       </div>
     </div>

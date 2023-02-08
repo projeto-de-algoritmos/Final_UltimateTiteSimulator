@@ -1,153 +1,83 @@
-class Node {
-  constructor(val, priority) {
-    this.val = val;
-    this.priority = priority;
-  }
-}
-
-class WeightedGraph {
-  constructor() {
-    this.adjacencyList = {};
-  }
-  addVertex(vertex) {
-    if (!this.adjacencyList[vertex]) this.adjacencyList[vertex] = [];
-  }
-  addEdge(vertex1, vertex2, weight) {
-    this.adjacencyList[vertex1].push({ node: vertex2, weight });
-    this.adjacencyList[vertex2].push({ node: vertex1, weight });
-  }
-}
-
-class PriorityQueue {
-  constructor() {
-    this.values = [];
-  }
-  enqueue(val, priority) {
-    let newNode = new Node(val, priority);
-    this.values.push(newNode);
-    this.bubbleUp();
-  }
-  bubbleUp() {
-    let idx = this.values.length - 1;
-    const element = this.values[idx];
-    while (idx > 0) {
-      let parentIdx = Math.floor((idx - 1) / 2);
-      let parent = this.values[parentIdx];
-      if (element.priority >= parent.priority) break;
-      this.values[parentIdx] = element;
-      this.values[idx] = parent;
-      idx = parentIdx;
-    }
-  }
-  dequeue() {
-    const min = this.values[0];
-    const end = this.values.pop();
-    if (this.values.length > 0) {
-      this.values[0] = end;
-      this.sinkDown();
-    }
-    return min;
-  }
-  sinkDown() {
-    let idx = 0;
-    const length = this.values.length;
-    const element = this.values[0];
-    while (true) {
-      let leftChildIdx = 2 * idx + 1;
-      let rightChildIdx = 2 * idx + 2;
-      let leftChild, rightChild;
-      let swap = null;
-
-      if (leftChildIdx < length) {
-        leftChild = this.values[leftChildIdx];
-        if (leftChild.priority < element.priority) {
-          swap = leftChildIdx;
-        }
-      }
-      if (rightChildIdx < length) {
-        rightChild = this.values[rightChildIdx];
-        if (
-          (swap === null && rightChild.priority < element.priority) ||
-          (swap !== null && rightChild.priority < leftChild.priority)
-        ) {
-          swap = rightChildIdx;
-        }
-      }
-      if (swap === null) break;
-      this.values[idx] = this.values[swap];
-      this.values[swap] = element;
-      idx = swap;
-    }
-  }
-}
-
-function getWeightedGraphFromData(formationPlayersData) {
-  var graph = new WeightedGraph();
-
-  // adiciona os vertices do grafo
-  formationPlayersData.forEach(playerData => {
-    graph.addVertex(playerData.id);
-  });
-  // adiciona arestas do grafo com seus respectivos pesos
-  formationPlayersData.forEach(playerData => {
-    playerData.touchOptions.forEach(touchOption => {
-      const weight = playerData.position === 'CF' | 'LW' | 'LW' ? playerData.finishing : playerData.passing;
-      graph.addEdge(playerData.id, touchOption.id, weight); //TODO: no lugar de touchoption.weight, colocar valor do toque ou do chute, a depender da posição
-    });
+function getWeightedGraph(players) {
+  let graph = {};
+  players.forEach(player => {
+    let touchOptions = {};
+    player.touchOptions.forEach(touchOption => {
+      touchOptions = { ...touchOptions, [touchOption.id.toString()]: player.passing }
+    })
+    graph = { ...graph, [player.id.toString()]: touchOptions }
   });
 
+  // console.log(graph);
   return graph;
 }
 
-function dijkstra(graph, start, finish) {
-  const nodes = new PriorityQueue();
-  const distances = {};
-  const previous = {};
-  let path = []; // para retornar ao fim
-  let smallest;
-  //fazer o "build" no estado inicial
-  for (let vertex in graph.adjacencyList) {
-    if (vertex === start) {
-      distances[vertex] = 0;
-      nodes.enqueue(vertex, 0);
-    } else {
-      distances[vertex] = Infinity;
-      nodes.enqueue(vertex, Infinity);
-    }
-    previous[vertex] = null;
+function dijkstra(graph, startNode, endNode) {
+  const passes = new Map(); // guarda a melhor média de precisão para chegar em um determinado jogador
+  const previousPlayers = new Map(); // guarda o último jogador que gerou a melhor média de precisão para chegar em um determinado jogador
+  const unvisitedPlayers = new Set();
+
+  // Inicializa os passes e os jogadores não visitados
+  for (const player of Object.keys(graph)) {
+    passes.set(player, { sum: Number.NEGATIVE_INFINITY, qty: 0 });
+    unvisitedPlayers.add(player);
   }
-  // enquanto tiver algo para visitar
-  while (nodes.values.length) {
-    smallest = nodes.dequeue().val;
-    if (smallest === finish) {
-      //Cria o caminho e vai para o fim
-      while (previous[smallest]) {
-        path.push(smallest);
-        smallest = previous[smallest];
+  passes.set(startNode, { sum: 0, qty: 0 });
+
+  while (unvisitedPlayers.size > 0) {
+    let currentPlayer = null;
+    let currentMaxAvg = Number.NEGATIVE_INFINITY;
+
+    // Encontra o jogador não visitado com a maior média de precisão
+    for (const player of unvisitedPlayers) {
+      const playerStatus = passes.get(player);
+      const playerAvg = playerStatus.qty === 0 ? 0 : playerStatus.sum / playerStatus.qty;
+
+      if (playerAvg > currentMaxAvg) {
+        currentPlayer = player;
+        currentMaxAvg = playerAvg;
       }
+    }
+
+    // Para caso não haja mais nós a serem visitados
+    if (currentPlayer === null) {
       break;
     }
-    if (smallest || distances[smallest] !== Infinity) {
-      for (let neighbor in graph.adjacencyList[smallest]) {
-        //encontrar o nó vizinho
-        let nextNode = graph.adjacencyList[smallest][neighbor];
-        //calcula a nova distancia do nó vizinho
-        let candidate = distances[smallest] + nextNode.weight;
-        let nextNeighbor = nextNode.node;
-        if (candidate < distances[nextNeighbor]) {
-          //atualiza a nova menor distancia até o nó vizinho
-          distances[nextNeighbor] = candidate;
-          //atualiza o nó anterior  - Como chegamos no vizinho
-          previous[nextNeighbor] = smallest
-          //adiciona na fila de prioridade a nova prioridade
-          nodes.enqueue(nextNeighbor, candidate);
-        }
+
+    unvisitedPlayers.delete(currentPlayer);
+
+    // Atualiza a média da precisão dos passes nós adjacentes
+    for (const neighbor of Object.keys(graph[currentPlayer])) {
+      const currentPlayerStatus = passes.get(currentPlayer);
+      const currentPlayerSum = currentPlayerStatus.sum + graph[currentPlayer][neighbor];
+      const currentPlayerQty = currentPlayerStatus.qty + 1;
+      const currentPlayerAvg = currentPlayerSum / currentPlayerQty;
+
+      const neighborStatus = passes.get(neighbor);
+      const neighborAvg = neighborStatus.qty === 0 ? 0 : neighborStatus.sum / neighborStatus.qty;
+
+      if (currentPlayerAvg > neighborAvg) { // nova média X média dos dados do neighbor
+        passes.set(neighbor, { sum: currentPlayerSum, qty: currentPlayerQty });
+        previousPlayers.set(neighbor, currentPlayer);
       }
     }
   }
-  if (path.length === 0) return null;
-  return path.concat(smallest).reverse();
+
+  // Encontra o caminho através dos nós anteriores
+  let currentPlayer = endNode;
+  const path = [];
+  while (currentPlayer !== startNode) {
+    path.unshift(currentPlayer);
+    currentPlayer = previousPlayers.get(currentPlayer);
+  }
+  path.unshift(startNode);
+
+  //return path;
+  return {
+    passingAvg: passes.get(endNode).sum / passes.get(endNode).qty,
+    path: path
+  }
 }
 
 export default dijkstra;
-export { getWeightedGraphFromData };
+export { getWeightedGraph };
